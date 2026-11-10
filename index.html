@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OKLM — Multiplayer Roleplay Game</title>
+  <meta name="description" content="OKLM is a multiplayer roleplay game inspired by the world of Sword Art Online, developed on the Nanos World engine. Currently in early development.">
+  <style>
+    :root {
+      --bg: #0c0e12;
+      --bg-alt: #12151b;
+      --surface: #171b22;
+      --border: #262c36;
+      --text: #e6e8eb;
+      --muted: #9aa3ae;
+      --accent: #6fa8dc;
+      --max: 960px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover, a:focus-visible { text-decoration: underline; }
+
+    .container {
+      width: 100%;
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Navigation */
+    header.nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(12, 14, 18, 0.88);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      height: 60px;
+    }
+    .nav .brand {
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--text);
+    }
+    .nav ul {
+      list-style: none;
+      display: flex;
+      gap: 24px;
+      margin: 0;
+      padding: 0;
+    }
+    .nav ul a {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .nav ul a:hover { color: var(--text); text-decoration: none; }
+
+    /* Hero */
+    .hero {
+      padding: 140px 0 120px;
+      text-align: center;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(111, 168, 220, 0.10), transparent 60%),
+        var(--bg);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero .tag {
+      display: inline-block;
+      margin-bottom: 24px;
+      padding: 4px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      margin: 0 0 20px;
+      font-size: clamp(3rem, 10vw, 5.5rem);
+      line-height: 1;
+      letter-spacing: 0.2em;
+      font-weight: 800;
+      /* compense l'espacement de la dernière lettre */
+      padding-left: 0.2em;
+    }
+    .hero p {
+      max-width: 560px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+
+    /* Sections */
+    section { padding: 96px 0; }
+    section:nth-of-type(even) { background: var(--bg-alt); }
+
+    .section-label {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin: 0 0 40px;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      line-height: 1.2;
+      font-weight: 700;
+    }
+
+    /* Video */
+    .video-frame {
+      overflow: hidden;
+      background: #000;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .video-frame video {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      background: #000;
+    }
+
+    /* About */
+    .facts {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .fact {
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .fact h3 {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .fact p { margin: 0; }
+    .about-text {
+      max-width: 680px;
+      margin: 0 0 40px;
+      color: var(--muted);
+    }
+
+    /* Roadmap */
+    .timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      position: relative;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--border);
+    }
+    .timeline li {
+      position: relative;
+      padding: 0 0 40px 44px;
+    }
+    .timeline li:last-child { padding-bottom: 0; }
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--bg-alt);
+      border: 2px solid var(--border);
+    }
+    .timeline li.current::before {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(111, 168, 220, 0.18);
+    }
+    .timeline .when {
+      display: block;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .timeline h3 {
+      margin: 2px 0 6px;
+      font-size: 1.2rem;
+    }
+    .timeline p { margin: 0; color: var(--muted); }
+    .timeline .now {
+      display: inline-block;
+      margin-left: 8px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      background: rgba(111, 168, 220, 0.15);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      vertical-align: middle;
+    }
+
+    /* Contact */
+    .contact-card {
+      max-width: 480px;
+      padding: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .contact-card .name {
+      margin: 0 0 4px;
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+    .contact-card a {
+      word-break: break-all;
+    }
+
+    /* Footer */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+    footer p { margin: 0 0 8px; }
+    footer p:last-child { margin: 0; }
+
+    /* Responsive */
+    @media (max-width: 760px) {
+      .facts { grid-template-columns: 1fr; }
+      section { padding: 72px 0; }
+      .hero { padding: 100px 0 88px; }
+    }
+    @media (max-width: 520px) {
+      .container { padding: 0 16px; }
+      .nav ul { gap: 14px; }
+      .nav ul a { font-size: 0.85rem; }
+      body { font-size: 16px; }
+    }
+    @media (max-width: 380px) {
+      .nav .brand { display: none; }
+      .nav .container { justify-content: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="nav">
+    <div class="container">
+      <a class="brand" href="#top">OKLM</a>
+      <nav aria-label="Main">
+        <ul>
+          <li><a href="#video">Video</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <div class="hero">
+      <div class="container">
+        <span class="tag">Early development</span>
+        <h1>OKLM</h1>
+        <p>A multiplayer roleplay game inspired by the world of Sword Art Online, built on the Nanos World engine.</p>
+      </div>
+    </div>
+
+    <section id="video">
+      <div class="container">
+        <p class="section-label">Video</p>
+        <h2>Presentation</h2>
+        <div class="video-frame">
+          <video controls preload="metadata" playsinline>
+            <source src="video/presentation.mp4" type="video/mp4">
+            Your browser does not support HTML video. <a href="video/presentation.mp4">Download the video</a>.
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <p class="section-label">About</p>
+        <h2>The project</h2>
+        <p class="about-text">
+          OKLM is an independent online multiplayer roleplay game inspired by the universe of
+          Sword Art Online, developed on the Nanos World engine. The project is in an early
+          stage of development.
+        </p>
+        <div class="facts">
+          <div class="fact">
+            <h3>Genre</h3>
+            <p>Online multiplayer RPG</p>
+          </div>
+          <div class="fact">
+            <h3>Platform</h3>
+            <p>PC</p>
+          </div>
+          <div class="fact">
+            <h3>Business model</h3>
+            <p>Free to play. Optional cosmetics and VIP ranks, with no gameplay advantage.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="container">
+        <p class="section-label">Roadmap</p>
+        <h2>Where we are</h2>
+        <ol class="timeline">
+          <li class="current">
+            <span class="when">Now</span>
+            <h3>Early development <span class="now">Current phase</span></h3>
+            <p>The game is being built.</p>
+          </li>
+          <li>
+            <span class="when">2027</span>
+            <h3>Closed beta</h3>
+            <p>Planned with 200 to 300 players.</p>
+          </li>
+          <li>
+            <span class="when">After the closed beta</span>
+            <h3>Public launch</h3>
+            <p>Opening to everyone.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <p class="section-label">Contact</p>
+        <h2>Get in touch</h2>
+        <div class="contact-card">
+          <p class="name">Jibril Khadraoui</p>
+          <a href="mailto:jiji33600@gmail.com">jiji33600@gmail.com</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>This is an independent fan-inspired project, not affiliated with or endorsed by Bandai Namco, Kawahara Reki or Aniplex.</p>
+      <p>&copy; 2026 OKLM</p>
+    </div>
+  </footer>
+
+</body>
+</html>
